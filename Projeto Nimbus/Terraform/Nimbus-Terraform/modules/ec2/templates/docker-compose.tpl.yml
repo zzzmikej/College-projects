@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  gateway:
+    image: zzzmiike/gateway:4.0.0
+    container_name: nimbus-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - PUBLIC_IP=${public_ip}
+      - PUBLIC_IP2=${public_ip2}
+      - CORS_ORIGIN=${cors_origin}
+    depends_on:
+      - users-ms
+      - events-ms
+      - chat-ms
+
+  users-ms:
+    image: zzzmiike/users_ms:4.0.0
+    container_name: nimbus-users-ms
+    ports:
+      - "3000:3000"
+    environment:
+      - PUBLIC_IP=${public_ip}
+      - PUBLIC_IP2=${public_ip2}
+      - CORS_ORIGIN=${cors_origin}
+
+  chat-ms:
+    image: zzzmiike/node_chat_ms:2.0.0
+    container_name: nimbus-chat-ms
+    ports:
+      - "3001:3001"
+    environment:
+      - PUBLIC_IP=${public_ip}
+      - PUBLIC_IP2=${public_ip2}
+      - CORS_ORIGIN=${cors_origin}
+
+  events-ms:
+    image: zzzmiike/events_ms:4.0.0
+    container_name: nimbus_events_ms
+    ports:
+      - "3002:3002"
