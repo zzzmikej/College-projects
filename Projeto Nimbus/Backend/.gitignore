@@ -1,0 +1,5 @@
+﻿*.vsidx
+*.sqlite
+/.vs
+application.yml
+.vscode
