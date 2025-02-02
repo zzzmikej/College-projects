@@ -1,0 +1,397 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;700&family=Moulpali&family=Poppins:wght@300;500;700&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    scroll-behavior: smooth;
+    font-family: 'Poppins' sans-serif;
+    text-decoration: none;
+}
+
+.container_options a {
+    text-decoration: none;
+    color: white;
+}
+
+body {
+    overflow-y: hidden;
+    background-color: #000000;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    transition: all 0.5s;
+}
+
+a:hover {
+    opacity: 60%;
+    transition: ease-in-out;
+}
+
+.container {
+    display: flex;
+}
+
+.left_side {
+    width: 18vw;
+    background-color: #21004C;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Poppins', sans-serif;
+}
+
+.left_side_logo {
+    display: flex;
+    align-items: center;
+    font-family: 'Kodchasan', sans-serif;
+    color: white;
+    font-weight: 200;
+    justify-content: left;
+    padding-left: 3.7%;
+    background-color: #21004C;
+    overflow: hidden;
+    font-size: 24px;
+}
+
+.num-agencia {
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+}
+
+.left_side_logo-add-func {
+    display: flex;
+    align-items: center;
+    font-family: 'Kodchasan', sans-serif;
+    color: white;
+    font-weight: 200;
+    justify-content: space-between;
+    padding: 0 3% 0 1%;
+    background-color: #21004C;
+    overflow: hidden;
+    font-size: 24px;
+}
+
+.left_side_logo-add-func img {
+    width: 23%;
+}
+
+.left_side_logo img {
+    width: 3%;
+}
+
+.container-logo-top-side {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile_user {
+    display: flex;
+    font-size: 18px;
+    background-color: #FFFEFE;
+    align-items: center;
+    justify-content: center;
+    padding: 5%;
+}
+
+.img_profile {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3% 0;
+}
+
+.infos {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info_profile,
+.icons_profile {
+    align-items: center;
+    width: 100%;
+    gap: 20%;
+    display: flex;
+    justify-content: center;
+    padding: 3%;
+}
+
+.info_profile {
+    gap: 15%;
+}
+
+.name_user {
+    font-size: 20px;
+}
+
+.func_user {
+    opacity: 50%;
+    font-size: 14px;
+    padding-right: 14px;
+}
+
+/* Options */
+
+.options {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* align-items: center; */
+    background-color: #21004C;
+    padding: 4vh 10px;
+}
+
+.container_options {
+    display: flex;
+    align-items: left;
+    flex-direction: column;
+    max-width: 70%;
+    margin-left: 12%;
+    margin: 10px;
+}
+
+.item_option {
+    display: flex;
+    margin-left: 130px;
+    gap: 5%;
+    width: 100%;
+    text-align: left;
+    padding: 18px 0;
+    background-color: #21004C;
+    color: white;
+    font-weight: 300;
+    font-family: 'Poppins', sans-serif;
+    margin: 0 20px;
+    transition: all 0.5s;
+    font-size: 18px;
+}
+
+.item_option:hover {
+    cursor: pointer;
+    opacity: 0.5;
+    transition: ease-in-out;
+}
+
+.fa {
+    display: flex;
+    text-align: center;
+    align-items: center;
+}
+
+.text_initial {
+    display: flex;
+    text-align: center;
+    align-items: center;
+}
+
+.selected {
+    background-color: #9E6AE1;
+    border-radius: 12px;
+    font-weight: bold;
+    padding-left: 20px;
+}
+
+.container-add-func-top-side {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: 0.5s all;
+}
+
+.container-add-func-top-side:hover {
+    cursor: pointer;
+    opacity: 0.5;
+    transition: ease-in-out;
+}
+
+/* Fim da Nav-bar */
+
+
+.container-center {
+    width: 78vw;
+    padding: 8vh 3vw;
+    justify-content: center;
+}
+
+.title-container {
+    padding: 0 0 5vh 8vh;
+    font-size: 28px;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+}
+
+.t-container {
+    display: flex;
+    font-family: 'Poppins', sans-serif;
+    gap: 4vh;
+    align-items: center;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.t-container.func {
+    max-height: 63vh;
+}
+
+.t-container.maq {
+    max-height: 53vh;
+}
+
+.title-cards {
+    width: 80%;
+    font-size: 12px;
+    background-color: #9E6AE1;
+    text-align: center;
+    border-radius: 9px;
+    display: flex;
+    justify-content: space-around;
+    padding: 2vh 9vh;
+    color: white;
+}
+
+.card-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 5vh;
+    width: 88%;
+    color: white;
+    background-color: #131313;
+    display: flex;
+    justify-content: space-around;
+    border-radius: 9px;
+    font-size: 10px;
+    padding: 17px;
+    cursor: pointer;
+    transition: max-height 0.3s ease-in-out;
+}
+
+.card-details {
+    max-height: 4vh;
+    overflow: hidden;
+}
+
+.card-details .row {
+    display: flex;
+    justify-content: space-around;
+}
+
+/* lista de funcionario */
+
+.card-details .card-nome,
+.card-details .card-email {
+    padding: 0 19vh;
+}
+
+.card-details .card-funcional,
+.card-details .card-maquina {
+    padding: 0 11vh;
+}
+
+.card-details .card-status.desativada {
+    padding: 0 24vh 0 26vh;
+}
+
+.card-details .card-status.ativo,
+.card-details .card-num-maquina {
+    padding: 0 26vh;
+}
+
+.card-details .card-sistema {
+    padding: 0 14vh;
+}
+
+.card-details .card-func {
+    padding: 0 20vh;
+}
+
+.card-details .row h2 {
+    font-size: 16px;
+    padding: 2vh 0;
+}
+
+.card-details .row p {
+    font-size: 15px;
+    font-weight: 300;
+}
+
+.card-container.expanded {
+    background-color: #555555;
+}
+
+.card-container.expanded .card-details {
+    max-height: 15vh;
+}
+
+.ativo {
+    color: #88EF85;
+}
+
+.desativada {
+    color: #FF3D3D;
+}
+
+button {
+    position: fixed;
+    background-color: #728DEC;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    right: 16vh;
+    width: 28vh;
+    height: 5vh;
+    margin-top: 60vh;
+}
+
+i {
+    padding-right: 10px;
+}
+
+.button-add:hover {
+    background-color: #724bae;
+    transition: background-color 0.3s;
+}
+
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+    scrollbar-width: auto;
+    scrollbar-color: #21004C #000000;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #000000;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #21004C;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.container_options a {
+    display: flex;
+    gap: 10px;
+    }
+    .list_func .text_initial {
+        width: 200px;
+        padding: 0;
+        margin: 0;
+    }

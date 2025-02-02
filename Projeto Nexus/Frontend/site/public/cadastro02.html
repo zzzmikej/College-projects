@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastre sua agência</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="./css/cadastro02.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="shortcut icon" href="./assets/img-nexus/favicon-32x32.png" type="image/x-icon">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body onload="validarSessao()">
+
+  <div class="topo">
+    <a href="cadastro01.html" style="color: white;">
+      <button class="btn-voltar">
+        <div class="seta-voltar"></div>
+        Voltar para tela anterior
+      </button>
+    </a>
+
+    <div class="imagem-title">
+      <img src="./assets/img-nexus/logo_nexs.svg" alt="Logo Nexus." srcset="">
+      <h2 class="title">Nexus.</h2>
+    </div>
+  </div>
+
+
+  <div class="container">
+
+    <div class="progress">
+      <div class="circle-active">1</div>
+      <div class="circle-active">2</div>
+      <div class="circle">3</div>
+      <div class="circle">4</div>
+
+    </div>
+
+    <h1 class="primary-title">Cadastro</h1>
+
+    <p>informe o Endereço da sua agência</p>
+
+    <!-- Informações adicionais -->
+    <div class="information-login">
+      <div class="ceps">
+        <div>
+          <label>CEP</label>
+          <input type="text" id="id_cep" name="name-cep" required placeholder="99999-999">
+          <div id="cep-error" style="color: red;"></div>
+        </div>
+
+        <div id="search_cep"><i class="fa fa-search" aria-hidden="true"></i></div>
+      </div>
+      <div id="enderecoAgencia">
+        <div class="enderecos">
+          <div>
+            <label>Logradouro*</label>
+            <input type="text" id="id_endereco" name="name-endereco" required placeholder="Av. Paulista...">
+          </div>
+          <div>
+            <label>Número</label>
+            <input type="text" id="id_numero" name="name-numero" required placeholder="0000">
+          </div>
+        </div>
+        <div>
+          <label>Bairro*</label>
+          <input type="text" id="id_bairro" name="name-bairro" required placeholder="Interlagos">
+        </div>
+        <div class="cidade-uf">
+          <div>
+            <label>Cidade*</label>
+            <input type="text" id="id_cidade" name="name-cidade" required placeholder="São Paulo">
+          </div>
+          <div>
+            <label>UF*</label>
+            <input type="text" id="id_uf" name="name-uf" required placeholder="SP">
+          </div>
+        </div>
+        <div>
+          <label>Complemento</label>
+          <input type="text" id="id_complemento" name="name-complemento" placeholder="Casa 03 ou Ap: 54">
+        </div>
+      </div>
+    </div>
+
+
+    <button class="submit-proxima" onclick="register()">Próxima etapa</button>
+
+  </div>
+
+
+
+
+  </div>
+
+</body>
+
+</html>
+
+<script>
+
+  document.getElementById("search_cep").addEventListener("click", function () {
+    const cep = document.getElementById("id_cep").value;
+    const cepError = document.getElementById("cep-error");
+
+    id_cep.addEventListener("blur", () => {
+      const cepValue = id_cep.value;
+      const cepPattern = /^\d{5}-\d{3}$/;
+
+      if (cep) {
+        const url = `https://viacep.com.br/ws/${cep}/json/`;
+
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            // Processar os dados retornados pela API
+            if (!cepPattern.test(cepValue)) {
+              cepError.textContent = "CEP incorreto. Use o formato 99999-999.";
+            } else {
+              console.log(data)
+              enderecoAgencia.innerHTML = `
+              <div class="enderecos">
+              <div>
+                <label>Logradouro*</label>
+                <input type="text" id="id_endereco" name="name-endereco" required value="${data.logradouro}">
+              </div>
+              <div>
+                <label>Número</label>
+                <input type="text" id="id_numero" name="name-numero" required placeholder="0000">
+              </div>
+            </div >
+            <div>
+              <label>Bairro*</label>
+              <input type="text" id="id_bairro" name="name-bairro" required value="${data.bairro}">
+            </div>
+            <div class="cidade-uf">
+              <div>
+                <label>Cidade*</label>
+                <input type="text" id="id_cidade" name="name-cidade" required value="${data.localidade}">
+              </div>
+              <div>
+                <label>UF*</label>
+                <input type="text" id="id_uf" name="name-uf" required value="${data.uf}">
+              </div>
+            </div>
+            <div>
+              <label>Complemento</label>
+              <input type="text" id="id_complemento" name="name-complemento" placeholder="Casa 03 ou Ap: 54">
+            </div>
+            `
+            }
+          })
+          .catch(error => {
+            console.error("Erro ao buscar o CEP:", error);
+          });
+      } else {
+        console.log("Por favor, insira um CEP válido.");
+      }
+    })
+  });
+
+  function register() {
+    var cep = document.getElementById("id_cep").value;
+    var cepVar = cep.replace("-", "");
+    var enderecoVar = document.getElementById("id_endereco").value;
+    var numeroVar = document.getElementById("id_numero").value;
+    var bairroVar = document.getElementById("id_bairro").value;
+    var cidadeVar = document.getElementById("id_cidade").value;
+    var ufVar = document.getElementById("id_uf").value;
+    var complementoVar = document.getElementById("id_complemento").value;
+
+
+    if (cepVar == "" || enderecoVar == "" || numeroVar == "" || bairroVar == "" || cidadeVar == "" || ufVar == "") {
+      console.log("Erro ao cadastrar! Confira os campos");
+      return false;
+    }
+
+    fetch("/usuarios/cadastrarEndAgencia", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        cepServer: cepVar,
+        enderecoServer: enderecoVar,
+        numeroServer: numeroVar,
+        bairroServer: bairroVar,
+        cidadeServer: cidadeVar,
+        ufServer: ufVar,
+        complementoServer: complementoVar
+      })
+    }).then(function (response) {
+      if (response.status === 200) {
+        sessionStorage.Endereco = enderecoVar;
+
+        console.log("Cadastro realizado com sucesso!");
+        setTimeout(() => {
+          window.location = "cadastro03.html";
+        }, "2000")
+      } else {
+        console.log("Erro ao realizar o cadastro.");
+      }
+    }).catch(function (error) {
+      console.log("Erro na resposta:", error);
+    });
+
+    return false;
+  }
+
+  function validarSessao() {
+    // aguardar();
+    var endereco = sessionStorage.Endereco;
+    var funcionario = sessionStorage.Funcionario;
+    var banco = sessionStorage.Banco;
+
+    if (funcionario != null) {
+
+    } else {
+      window.location = "cadastro01.html";
+    }
+
+  }
+</script>

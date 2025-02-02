@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Agencia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="left_side_logo-add-func">
+        <div class="container-logo-top-side">
+            <img src="./assets/img-nexus/logo_nexs.svg" alt="Logo Nexus." srcset="">
+            <h2 class="left_side_title">Nexus.</h2>
+        </div>
+        <div class="container-add-func-top-side">
+            <i class="fa fa-user-plus" aria-hidden="true"></i>
+            <p class="text-add-func">Funcionário</p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="left_side">
+            <div class="profile_user">
+                <div class="infos">
+                    <img src="./assets/img-nexus/Logo_Bradesco.svg" alt="" srcset="">
+                    <div class="info_profile">
+                        <h5 class="name_user" id="name_user"></h5>
+                    </div>
+                    <div class="icons_profile">
+                        <a href="#"><i class="fa fa-user" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-cog" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="options">
+                <div class="container_options">
+                    <a href="index.html" class="text_initial">
+                        <div class="initial item_option ">
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                            <p class="text_initial">Página Inicial</p>
+                    </a>
+                </div>
+            </div>
+            <div class="container_options">
+                <a href="dashboard_func.html">
+                    <div class="dashboard item_option selected">
+                        <i class="fa fa-line-chart" aria-hidden="true"></i>
+                        <p class="text_initial">Dashboard</p>
+                </a>
+            </div>
+        </div>
+        <div class="container_options">
+            <a href="historico.html">
+                <div class="hist item_option ">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                    <p class="text_initial">Histórico</p>
+            </a>
+        </div>
+    </div>
+    <div class="container_options">
+        <a href="lista_func.html">
+            <div class="list_func item_option ">
+                <i class="fa fa-book" aria-hidden="true"></i>
+                <p class="text_initial">Lista Funcionários</p>
+        </a>
+    </div>
+    </div>
+    <div class="container_options ">
+        <a href="login.html">
+            <div class="logout item_option ">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                <p class="text_initial">Sair</p>
+        </a>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="right_side">
+        <div class="f-part">
+            <h1 class="title-right-agencia">LISTA DE MAQUINAS</h1>
+            <select name="" id="select_maquinas" class="lista_maquinas">
+                <option value="x" selected>Todas as maquinas</option>
+            </select>
+            <div class="container-right">
+                <div class="cards-maquinas" id="cards_maquinas">
+
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <div class="full-tr">
+                    <h1 class="title-tr">Tarefas em primeiro plano</h1>
+                    <table class="tg">
+                        <thead>
+                            <tr>
+                                <th class="tg-baqh">Id da maquina</th>
+                                <th class="tg-baqh" id="nome-tarefa">Nome da tarefa</th>
+                                <th class="tg-baqh cpu" id="">Consumo de Processamento</th>
+                                <th class="tg-baqh" id="horario">Horario</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabela_processos">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="s-part">
+            <div class="container-s-part">
+                <h1 class="title-container-s-part">Maquinas que mais utilizaram os componentes</h1>
+                <!-- <select id="agencias">
+                    <option value="" selected disabled>Maquinas</option>
+                </select> -->
+                <div class="container-alertas" id="container_alertas">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
+
+<script>
+
+    function validarSessao() {
+        var email = sessionStorage.EMAIL_USUARIO;
+        var nome = sessionStorage.NOME_USUARIO;
+        var sobrenome = sessionStorage.SOBRENOME;
+        if (nome != null) {
+            name_user.innerHTML = `${nome} ${sobrenome}`
+        } else {
+            window.location = "login.html";
+        }
+    }
+
+    window.onload = validarSessao(), listarMaquinas();
+    var machineData = [];
+
+    function listarMaquinas() {
+        var agencia = sessionStorage.AGENCIA;
+
+        fetch("/dashboard/listarMaquinasAg", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                agenciaServer: agencia,
+            })
+        }).then(function (response) {
+            if (response.ok) {
+                response.json().then(json => {
+                    json.forEach(e => {
+                        const idMaq = e.idMaquina
+                        cards_maquinas.innerHTML += `
+                        <div id="receive_i${idMaq}">
+                        </div>
+                        `;
+
+                        select_maquinas.innerHTML += `
+                            <option value="${e.idMaquina}">Maquina ${e.idMaquina}</option>
+                            `
+                        // agencias.innerHTML += `
+                        //     <option value="${e.idMaquina}">Maquina ${e.idMaquina}</option>
+                        //     `
+                        listarStatusMaquinas(idMaq)
+
+                        setTimeout(() => {
+                            listarProcessos(idMaq)
+                        }, 200);
+
+                    })
+                })
+            }
+
+        });
+    }
+
+    var procMoreUsed = 0;
+    var numMaqProc = 0;
+    var dataHoraProc = '';
+    var ramMoreUsed = 0;
+    var numMaqRam = 0;
+    var dataHoraRam = '';
+    var diskMoreUsed = 0;
+    var numMaqDisk = 0;
+    var dataHoraDisk = '';
+
+    var arrayItems = [];
+
+    function listarProcessos(idMaq) {
+        var tabela_processos = document.getElementById('tabela_processos');
+
+        fetch("/dashboard/listarProcessos", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                maquinaServer: idMaq,
+            })
+        }).then(function (response) {
+            if (response.ok) {
+                    response.json().then(item => {
+
+                    arrayItems = arrayItems.concat(item);
+                    
+                    arrayItems.sort((a, b) => b.UsoCPU - a.UsoCPU);
+                    
+                    tabela_processos.innerHTML = "";
+
+                    arrayItems.forEach(e => {
+                        tabela_processos.innerHTML += `
+                        <tr>
+                            <td class="tg-baqh">${e.fkMaquina}</td>
+                            <td class="tg-baqh"><i><b>${e.NomeProcesso}</b></i></td>
+                            <td class="tg-baqh cpu"><span>${Math.round(e.UsoCPU)}%</span></td>
+                            <td class="tg-baqh">${e.DataHora}</td>
+                        </tr>
+                    `;
+                        var elemento = tabela_processos.lastElementChild;
+                        var tg_baqh = elemento.querySelector('.cpu span');
+
+                        if (tg_baqh) {
+                            if (e.UsoCPU <= 25 && e.UsoCPU >= 0) {
+                                tg_baqh.classList.add('alert-blue');
+                            } else if (e.UsoCPU <= 50 && e.UsoCPU > 25) {
+                                tg_baqh.classList.add('alert-yellow');
+                            } else if (e.UsoCPU <= 100 && e.UsoCPU > 50) {
+                                tg_baqh.classList.add('alert-red');
+                            }
+                        } else {
+                            console.error("Elemento tg_baqh não encontrado.");
+                        }
+                    });
+                });
+            }
+        });
+    }
+
+
+    var listaDiscos = [];
+    var listaProcessadores = [];
+    var listaMemorias = [];
+    
+    function listarStatusMaquinas(idMaquina) {
+        var agencia = sessionStorage.AGENCIA;
+        var banco = sessionStorage.BANCO;
+        var idMaq = idMaquina;
+        var nomeComp = "";
+
+        fetch("/dashboard/statusMaquinas", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                agenciaServer: agencia,
+                bancoServer: banco,
+                maquinaServer: idMaq,
+            })
+        }).then(function (response) {
+            if (response.ok) {
+                response.json().then(e => {
+
+                    
+                    machineData = machineData.concat(e);
+                    
+                    machineData.sort((a, b) => b.IdMaquina + a.IdMaquina);  
+                })
+                machineData.forEach(data => {
+                    var cards_maquinas = document.getElementById(`receive_i${data.IdMaquina}`);
+                    
+                    cards_maquinas.innerHTML = `
+                        <div class="card-maq card-maq${data.IdMaquina}">
+                        <div class="cab-card">
+                            <h3 class="title-card-maq">Maquina</h3>
+                            <p class="num-maquina">${data.IdMaquina}</p>
+                        </div>
+                        <div class="center-card">
+                        <div class="info-card" id="card_cpu${data.IdMaquina}">
+                        </div>
+                        <div class="info-card" id="card_ram${data.IdMaquina}">
+                        </div>
+                        <div class="info-card" id="card_disco${data.IdMaquina}">
+                        </div>
+                        </div>
+                        <div class="footer-card">
+                            <div class="info-card">
+                                <p class="stats">Status</p>
+                                <p class="situacao-stats desativada" id="stats_maquina${data.IdMaquina}">${data.Status}</p>
+                            </div>
+                        </div>
+                        </div>
+                        `
+                })
+                machineData.forEach(card => {
+                            
+                                if (card.NomeComponente.includes("Processador")) {
+                                    
+                                    if (card.UsoAtual >= procMoreUsed) {
+                                        procMoreUsed = card.UsoAtual
+                                        numMaqProc = card.IdMaquina;
+                                        dataHoraProc = card.DataHora;
+                                    }
+                                    
+                                    var card_cpu = document.getElementById(`card_cpu${card.IdMaquina}`);
+                                    card_cpu.innerHTML = `
+                                    <p class="item">CPU</p>
+                                    <p class="cons-item">${Math.round(card.UsoAtual)}%</p>
+                                    `;
+                                }
+                                    var cards_disco = document.getElementById(`card_disco${card.IdMaquina}`);
+                                    var calcPercentage = (card.UsoAtual * 100) / card.CapacidadeMaxima
+
+                                    if (card.UsoAtual >= diskMoreUsed) {
+                                        diskMoreUsed = card.UsoAtual
+                                        numMaqDisk = card.IdMaquina;
+                                        dataHoraDisk = card.DataHora;
+                                    }
+
+                                    cards_disco.innerHTML = `
+                                    <p class="item">Disco</p>
+                                    <p class="cons-item">${Math.round(calcPercentage)}%</p>   
+                                    `
+                                if (card.NomeComponente.includes("RAM")) {
+    
+                                    if (card.UsoAtual >= ramMoreUsed) {
+                                        ramMoreUsed = card.UsoAtual
+                                        numMaqRam = card.IdMaquina;
+                                        dataHoraRam = card.DataHora;
+                                    }
+    
+                                    var Cards_ram = document.getElementById(`card_ram${card.IdMaquina}`);
+    
+                                    Cards_ram.innerHTML = `
+                                <p class="item">RAM</p>
+                                <p class="cons-item">${Math.round(card.UsoAtual)}%</p>
+                                `
+                                } 
+    
+                                var Cards_status = document.getElementById(`stats_maquina${card.IdMaquina}`);
+    
+                                if (card.Status == 'Ativa') {
+                                    Cards_status.style.color = '#88EF85'
+                                } else if (card.Status == 'Inativa') {
+                                    Cards_status.style.color = '#FF3D3D'
+                                } else if (card.Status == 'Manutenção') {
+                                    Cards_status.style.color = '#FFDE68'
+                                } else {
+                                    Cards_status.stylcard.color = 'black';
+                                }
+                        })
+            }
+        })
+        // coloque esse timeout pq tava dando bigode
+        setTimeout(function () {
+            container_alertas.innerHTML = `
+            <div class="alerta" id="alerta">
+                        <div class="t-alerta">
+                            <p class="i-maquina">Máquina ${numMaqProc}</p>
+                            <div class="horario">
+                                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                <p class="horario_alerta">${dataHoraProc}</p>
+                            </div>
+                        </div>
+                        <div class="b-alerta alert-blue">
+                            <p class="elemento-alerta">CPU</p>
+                            <p class="porcentagem-alerta">${Math.round(procMoreUsed)} %</p>
+                        </div>
+                    </div>
+                    <div class="alerta">
+                        <div class="t-alerta">
+                            <p class="i-maquina">Máquina ${numMaqRam}</p>
+                            <div class="horario">
+                                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                <p class="horario_alerta">${dataHoraRam}</p>
+                            </div>
+                        </div>
+                        <div class="b-alerta alert-red">
+                            <p class="elemento-alerta">RAM</p>
+                            <p class="porcentagem-alerta">${Math.round(ramMoreUsed)} GB</p>
+                        </div>
+                    </div>
+                    <div class="alerta">
+                        <div class="t-alerta">
+                            <p class="i-maquina">Máquina ${numMaqDisk}</p>
+                            <div class="horario">
+                                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                <p class="horario_alerta">${dataHoraDisk}</p>
+                            </div>
+                        </div>
+                        <div class="b-alerta alert-yellow">
+                            <p class="elemento-alerta">DISCO</p>
+                            <p class="porcentagem-alerta">${Math.round(diskMoreUsed)} GB</p>
+                        </div>
+                    </div>
+            `
+        }, 100);
+    }
+
+    document.getElementById('select_maquinas').addEventListener('change', function () {
+        var maquinaSelecionada = this.value;
+
+        if (maquinaSelecionada == 'x') {
+            var cards = document.querySelectorAll('.card-maq');
+            cards.forEach(function (card) {
+                card.classList.add('show');
+                card.classList.remove('hidden')
+                cards_maquinas.style.gap = '20px'
+            })
+        } else {
+            var cards = document.querySelectorAll('.card-maq');
+            cards.forEach(function (card) {
+                card.classList.add('hidden');
+                card.classList.remove('show')
+                cards_maquinas.style.gap = '0'
+            });
+
+            var cardSelecionado = document.getElementById(`receive_i${maquinaSelecionada}`);
+
+            if (cardSelecionado) {
+                var elementoFilho = cardSelecionado.children;
+
+                for (var i = 0; i < elementoFilho.length; i++) {
+                    var filhoSelecionado = elementoFilho[i];
+                    filhoSelecionado.classList.remove('hidden');
+                }
+            }
+        }
+    });
+</script>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/cadastro01.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="shortcut icon" href="./assets/img-nexus/favicon-32x32.png" type="image/x-icon">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body onload="validarSessao()">
+    <div class="topo">
+        <a href="index.html" style="color: white;">
+            <button class="btn-voltar">
+                <div class="seta-voltar"></div>
+                Voltar para tela principal
+            </button>
+        </a>
+        <div class="imagem-title">
+            <img src="./assets/img-nexus/logo_nexs.svg" alt="Logo Nexus." srcset="">
+            <h2 class="title">Nexus.</h2>
+        </div>
+    </div>
+
+
+    <div class="container">
+
+        <div class="progress">
+            <div class="circle-active">1</div>
+            <div class="circle">2</div>
+            <div class="circle">3</div>
+            <div class="circle">4</div>
+        </div>
+
+        <h1 class="primary-title">Bem-Vindo ao Nexus</h1>
+
+        <p>Coloque suas informações básicas para fazer o cadastro</p>
+
+        <!-- Informações adicionais -->
+        <div class="information-login">
+            <label for="first-name">Nome*</label>
+            <input id="firstName" name="first-name" required placeholder="Insira seu nome">
+
+            <label for="last_name">Sobrenome*</label>
+            <input id="lastName" name="last-name" required placeholder="Insira seu sobrenome">
+
+            <label for="email">Email corporativo*</label>
+            <input id="email" name="email" required placeholder="Insira seu email">
+
+            <label for="cargo">Cargo*</label>
+            <input name="role" id="role" required placeholder="Insira seu cargo">
+
+            <div class="phone">
+                <label for="Telefone">Telefone Corporativo*</label>
+                <div>
+                    <input id="phone_ddd" class="tel-ddd" name="phone_ddd" placeholder="(99)">
+                    <input id="phone_number" name="phone-number" placeholder="99999-9999">
+                </div>
+            </div>
+
+            <div class="agency">
+                <label for="Agency">Banco*</label>
+                <div>
+                    <select id="agency_empresa" required>
+                        <option selected>Selecione um Banco</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+        <a class="submit-proxima"><button class="submit-proxima" onclick="register()">Póxima etapa</button></a>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+
+    function validarSessao() {
+        sessionStorage.clear();
+        
+        fetch("/usuarios/listarEmpresa", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+            })
+        }).then(function (response) {
+            if (response.ok) {
+                response.json().then(json => {
+
+                    json.forEach(element => {
+                        agency_empresa.innerHTML += `
+            <option value="${element.nomeEmpresa}">${element.nomeEmpresa}</option>
+          `;
+                    });
+                })
+            }
+        });
+    }
+
+    function register() {
+        var firstNameVar = document.getElementById("firstName").value;
+        var lastNameVar = document.getElementById("lastName").value;
+        var emailVar = document.getElementById("email").value;
+        var phoneDDDVar = document.getElementById("phone_ddd").value;
+        var phoneNumberVar = document.getElementById("phone_number").value;
+        var agencyEmpreVar = document.getElementById("agency_empresa").value;
+        var roleVar = document.getElementById("role").value;
+
+        if (firstNameVar == "" || lastNameVar == "" || emailVar == "" || phoneDDDVar == "" || phoneNumberVar == "" || roleVar == "" || agencyEmpreVar == "") {
+            console.log("Erro ao cadastrar! Confira os campos");
+            return false;
+        }
+
+        fetch("/usuarios/cadastrarFuncionario", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                firstNameServer: firstNameVar,
+                lastNameServer: lastNameVar,
+                emailServer: emailVar,
+                phoneDDDServer: phoneDDDVar,
+                phoneNumberServer: phoneNumberVar,
+                roleServer: roleVar,
+                agencyEmpreServer: agencyEmpreVar
+            })
+        }).then(function (response) {
+            if (response.status === 200) {
+                sessionStorage.Funcionario = firstNameVar;
+                sessionStorage.Banco = agencyEmpreVar;
+                sessionStorage.Email = emailVar;
+
+                console.log("Cadastro realizado com sucesso!");
+                setTimeout(() => {
+                    window.location = "cadastro02.html";
+                }, "2000")
+            } else {
+                console.log("Erro ao realizar o cadastro.");
+            }
+        }).catch(function (error) {
+            console.log("Erro na resposta:", error);
+        });
+
+        return false;
+    }
+</script>

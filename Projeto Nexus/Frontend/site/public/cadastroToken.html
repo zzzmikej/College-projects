@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastre sua agência</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="./css/cadastroToken.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="shortcut icon" href="./assets/img-nexus/favicon-32x32.png" type="image/x-icon">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body onload="validarSessao()">
+  <div class="topo">
+    <a href="cadastro04.html" style="color: white;">
+      <button class="btn-voltar">
+        <div class="seta-voltar"></div>
+        Voltar para tela anterior
+      </button>
+    </a>
+    <div class="imagem-title">
+      <img src="./assets/img-nexus/logo_nexs.svg" alt="Logo Nexus." srcset="">
+      <h2 class="title">Nexus.</h2>
+    </div>
+  </div>
+
+  <div class="container-context">
+
+    <h2>Cadastro concluído com sucesso!</h2>
+
+    <h3>Seu token de acesso é:</h3>
+    <div id="tokenAcesso">
+
+    </div>
+
+    <h3>Você precisa do seu token para visualizar a dashboard.</h3>
+
+    <p>É importante que esse token seja anotado, uma vez que não será exibido novamente.</p>
+
+
+    <button class="submit-proxima" onclick="login()">Finalizar Cadastro</button>
+  </div>
+
+</body>
+
+</html>
+
+<script>
+  function login() {
+    window.location = "login.html";
+  }
+
+  function validarSessao() {
+    var endereco = sessionStorage.Endereco;
+    var funcionario = sessionStorage.Funcionario;
+    var banco = sessionStorage.Banco;
+    var agencia = sessionStorage.Agencia;
+    var email = sessionStorage.Email;
+
+    if (funcionario != null) {
+
+    } else {
+      window.location = "cadastro01.html";
+    }
+    const num1 = Math.round(Math.random() * (1 - 9)) + 1;
+    const num2 = Math.round(Math.random() * (10 - 1000));
+    const num3 = Math.round(Math.random() * (10 - 1000));
+    const num4 = (num2 * num3) / num1;
+    const num4String = num4.toString(); // Converte num4 em uma string
+    const token = num4String.replace(/2/g, "A").replace(/4/g, "B").replace(/6/g, "C").replace(/8/g, "D").replace(/-/g, "").replace(".", "");
+
+    var emailVar = sessionStorage.Email;
+    var tokenVar = token;
+    var funcionarioVar = sessionStorage.Funcionario;
+
+    if (sessionStorage.Token == null) {
+      fetch("/usuarios/cadastrarToken", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          emailServer: emailVar,
+          tokenServer: tokenVar,
+          funcionarioServer: funcionarioVar,
+        })
+      }).then(function (response) {
+        if (response.status === 200) {
+          sessionStorage.Token = tokenVar;
+          tokenAcesso.innerHTML = `<h1>${token}</h1>`
+          console.log("Cadastro realizado com sucesso!");
+        } else {
+          console.log("Erro ao realizar o cadastro.");
+        }
+      }).catch(function (error) {
+        console.log("Erro na resposta:", error);
+      });
+    } else {
+      tokenAcesso.innerHTML = `<h1>${sessionStorage.Token}</h1>`
+    }
+    return false;
+  }
+</script>

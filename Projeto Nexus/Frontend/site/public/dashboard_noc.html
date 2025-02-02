@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - NOC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="shortcut icon" href="./assets/img-nexus/favicon-32x32.png" type="image/x-icon">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="left_side_logo">
+        <img src="./assets/img-nexus/logo_nexs.svg" alt="Logo Nexus." srcset="">
+        <h2 class="left_side_title">Nexus.</h2>
+    </div>
+    <div class="container">
+        <div class="left_side">
+            <div class="profile_user">
+                <div class="infos">
+                    <img src="./assets/img-nexus/Logo_Bradesco.svg" alt="" srcset="">
+                    <div class="info_profile">
+                        <h5 class="name_user" id="name_user"></h5>
+                    </div>
+                    <div class="icons_profile">
+                        <a href="#"><i class="fa fa-user" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-cog" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="options">
+                <div class="container_options">
+                    <a href="index.html">
+                        <div class="initial item_option ">
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                            <p class="text_initial">Página Inicial</p>
+                    </a>
+                </div>
+            </div>
+            <div class="container_options">
+                <a href="dashboard_func.html">
+                    <div class="dashboard item_option selected">
+                        <i class="fa fa-line-chart" aria-hidden="true"></i>
+                        <p class="text_initial">Dashboard</p>
+                </a>
+            </div>
+        </div>
+        <div class="container_options">
+            <a href="historico.html">
+                <div class="hist item_option ">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                    <p class="text_initial">Histórico</p>
+            </a>
+        </div>
+    </div>
+    <div class="container_options">
+        <a href="lista_func.html">
+            <div class="list_func item_option ">
+                <i class="fa fa-book" aria-hidden="true"></i>
+                <p class="text_initial">Lista Funcionários</p>
+        </a>
+    </div>
+    </div>
+    <div class="container_options ">
+        <a href="login.html">
+            <div class="logout item_option ">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                <p class="text_initial">Sair</p>
+        </a>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="right_side">
+        <div class="f-part">
+            <h1 class="title-right">MAIOR CONSUMO DOS COMPONENTES</h1>
+            <div class="container-right">
+                <div class="card">
+                    <div class="top-card">
+                        <h1 class="text-card">CPU</h1>
+                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                    </div>
+                    <div class="bottom-card" id="altoConsumoCPU">
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="top-card">
+                        <h1 class="text-card">RAM</h1>
+                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                    </div>
+                    <div class="bottom-card" id="altoConsumoRAM">
+
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="top-card">
+                        <h1 class="text-card">DISCO</h1>
+                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                    </div>
+                    <div class="bottom-card" id="altoConsumoDisco">
+                    </div>
+                </div>
+            </div>
+            <div class="full-tr">
+                <h1 class="title-tr">Agências</h1>
+                <table class="tg">
+                    <thead>
+                        <tr>
+                            <th class="tg-baqh">Numero Agência</th>
+                            <th class="tg-baqh">Consumo CPU</th>
+                            <th class="tg-baqh">Consumo RAM</th>
+                            <th class="tg-baqh">Consumo Disco</th>
+                            <th class="tg-baqh">Qtd. máquina cima de 70%</th>
+                            <th class="tg-baqh">Qtd. de máquina da agência</th>
+                        </tr>
+                    </thead>
+                    <tbody id="agencias_noc">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="s-part">
+            <div class="container-s-part">
+                <h1 class="title-container-s-part">Maquinas que mais utilizaram os componentes</h1>
+                <div class="container-alertas" id="agenciaComp">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    var agenciaVar = [];
+
+    function validarSessao() {
+        var email = sessionStorage.EMAIL_USUARIO;
+        var nome = sessionStorage.NOME_USUARIO;
+        var sobrenome = sessionStorage.SOBRENOME;
+        var cargo = sessionStorage.CARGO;
+        const empresa = sessionStorage.BANCO;
+
+        if (nome != null) {
+            name_user.innerHTML = `${nome} ${sobrenome}`;
+            fetch("/dashboard/listarAgenciasNOC", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    empresaServer: empresa,
+                })
+            }).then(function (response) {
+                if (response.ok) {
+                    response.json().then(json => {
+                        json.forEach(element => {
+
+                            agencias_noc.innerHTML += `
+                        <tr>
+                            <td class="tg-baqh">${element.CodigoAgencia}</td>
+                            <td class="tg-baqh"><span class="alert-red" id="altaCPU${element.CodigoAgencia}"></span></td>
+                            <td class="tg-baqh"><span class "alert-yellow" id="altaRAM${element.CodigoAgencia}"></span></td>
+                            <td class="tg-baqh"><span class="alert-red" id="altaDisco${element.CodigoAgencia}"></span></td>
+                            <td class="tg-baqh">${element.MaquinasAcimaDe70Percent}</td>
+                            <td class="tg-baqh">${element.TotalMaquinas}</td>
+                        </tr>
+                        `;
+
+                            agenciaComp.innerHTML += `
+                        <div class="alerta-agencia">Agência ${element.CodigoAgencia}</div>
+                        `;
+                            agenciaComp.innerHTML += `
+                        <div class="alerta" id="maquinasComp${element.CodigoAgencia}">
+                        </div>
+                        `;
+                            agenciaVar.push(element.CodigoAgencia);
+                        });
+                        ListarMaquinas();
+                    });
+                }
+            });
+        } else {
+            window.location = "login.html";
+        }
+    }
+    window.onload = validarSessao();
+
+    function listarLocalizacao(idMaquina, EnderecoIP, MaiorPorcentagem) {
+        const empresa = sessionStorage.BANCO;
+        fetch(`http://api.ipstack.com/${EnderecoIP}?access_key=6cb3df8633d1fbbee18b56a24bfbfd01`)
+        .then(response => response.json())
+        .then(data => {
+            var localizacao = document.getElementById(`localizacao${MaiorPorcentagem}`);
+            
+            if (data.city != "São Paulo") {
+                localizacao.innerHTML = `
+                Localização  | <a style='color: red;'>${EnderecoIP}</a>
+                `;
+            } else {
+                localizacao.innerHTML = `
+                Localização  | <a style="color: green;">${EnderecoIP}</a>
+                `;
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao obter a localizacao: ', error);
+        })
+    }
+    var data = []
+    function ListarMaquinas() {
+        var banco = sessionStorage.BANCO
+        agenciaVar.forEach(agenciaNumero => {
+            fetch("/dashboard/listarMaquinas", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    bancoServer: banco,
+                })
+            }).then(function (resposta) {
+                if (resposta.ok) {
+                    resposta.json().then(json => {
+                        json.forEach(element => {
+                            data.push(element)
+                            var maquinasCompElement = document.getElementById(`maquinasComp${agenciaNumero}`);
+
+                            maquinasCompElement.innerHTML += `
+                            <div class="t-alerta">
+                                    <p class="i-maquina">Máquina ${element.IdMaquina}</p>
+                                    <div class="horario">
+                                        <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                        <p class="horario_alerta">${element.DataHora}</p>
+                                        </div>
+                                    </div>
+                                <div class="b-alerta alert-locale" id="localizacao${Math.round(element.MaiorPorcentagem)}"></div>
+                                <div class="b-alerta alert-blue">
+                                    <p class="elemento-alerta">${element.NomeComponente}</p>
+                                    <p class="porcentagem-alerta">${Math.round(element.MaiorPorcentagem)}%</p>
+                                </div>
+                            `;
+                            listarLocalizacao(element.IdMaquina, element.EnderecoIP, Math.round(element.MaiorPorcentagem))
+                            plotarGrafico(element.NomeComponente, element.IdMaquina, element.NumeroAgencia, element.MaiorPorcentagem)
+                        });
+                    });
+                }
+            });
+        });
+    }
+
+    let proximaAtualizacao;
+    function plotarGrafico(NomeComponente, IdMaquina, NumeroAgencia, MaiorPorcentagem) {
+
+        const doughnutLabel = {
+            id: 'doughtnutLabel',
+            beforeDatasetsDraw(chart, args, pluginOptions) {
+                const { ctx, data } = chart;
+                ctx.save();
+                const xCoor = chart.getDatasetMeta(0).data[0].x;
+                const yCoor = chart.getDatasetMeta(0).data[0].y;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle'
+                ctx.font = 'bold 15px Poppins';
+                ctx.fillStyle = 'rgb(241, 241, 244)';
+                ctx.fillText(`${data.datasets[0].data[0]}%`, xCoor, yCoor);
+            }
+        }
+
+        agenciaVar.forEach(agenciaNumero => {
+            if (NomeComponente.includes("Processador")) {
+                var porcentagem = Math.round(MaiorPorcentagem);
+                var altaCPU = document.getElementById(`altaCPU${agenciaNumero}`); altaCPU.innerHTML = `
+                    ${porcentagem}%
+                `;
+
+                altoConsumoCPU.innerHTML = `
+                    <div class="left-bottom-card">
+                        <h1 class="agencia-text">Agência</h1>
+                        <p class="num-agencia">${NumeroAgencia}</p>
+                        <h1 class="maquina-text">Máquina</h1>
+                        <p class="num-maquina">${IdMaquina}</p>
+                    </div>
+                    <div class="chartBox">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                    `;
+
+                const data = {
+                    labels: [],
+                    datasets: [{
+                        label: 'Consumo geral de CPU',
+                        data: [porcentagem, (porcentagem - 100)],
+                        backgroundColor: [
+                            'rgb(158, 106, 225)',
+                            'rgb(241, 241, 244)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                };
+                const config = {
+                    type: 'doughnut',
+                    data: data,
+                    options: {
+                        hoverBorderWidth: 0,
+                        borderWidth: 0,
+                        weight: 1,
+                        cutout: 37,
+                        events: ["mouseout", "click", "touchstart", "touchmove", "touchend"],
+                        showTooltips: false
+                    },
+                    plugins: [doughnutLabel]
+                };
+                const myChart = new Chart(
+                    document.getElementById('myChart'),
+                    config
+                );
+            }
+
+            if (NomeComponente.includes("Memória RAM")) {
+                var porcentagem = Math.round(MaiorPorcentagem);
+                var altaRAM = document.getElementById(`altaRAM${agenciaNumero}`);
+                altaRAM.innerHTML = `
+                        ${porcentagem}%
+                        `;
+
+                altoConsumoRAM.innerHTML = `
+                            <div class="left-bottom-card">
+                        <h1 class="agencia-text">Agência</h1>
+                        <p class="num-agencia">${NumeroAgencia}</p>
+                        <h1 class="maquina-text">Máquina</h1>
+                        <p class="num-maquina">${IdMaquina}</p>
+                    </div>
+                    <div class="chartBox">
+                        <canvas id="myChart1"></canvas>
+                    </div>
+                    `;
+
+                const doughnutLabel1 = {
+                    id: 'doughnutLabel',
+                    beforeDatasetsDraw(chart, args, pluginOptions) {
+                        const { ctx } = chart;
+
+                        ctx.save();
+                        const xCoor1 = chart.getDatasetMeta(0).data[0].x;
+                        const yCoor1 = chart.getDatasetMeta(0).data[0].y;
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle'
+                        ctx.font = 'bold 15px Poppins';
+                        ctx.fillStyle = 'rgb(241, 241, 244)';
+                        ctx.fillText(`${dataDoughnut1.datasets[0].data[0]}%`, xCoor1, yCoor1);
+                    }
+                };
+
+                const dataDoughnut1 = {
+                    labels: [],
+                    datasets: [{
+                        label: 'Consumo geral de CPU',
+                        data: [porcentagem, (porcentagem - 100)],
+                        backgroundColor: [
+                            'rgb(158, 106, 225)',
+                            'rgb(241, 241, 244)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                };
+
+                const configDoughnut1 = {
+                    type: 'doughnut',
+                    data: dataDoughnut1,
+                    options: {
+                        hoverBorderWidth: 0,
+                        borderWidth: 0,
+                        weight: 1,
+                        cutout: 37,
+                        events: ["mouseout", "click", "touchstart", "touchmove", "touchend"],
+                        showTooltips: false
+                    },
+                    plugins: [doughnutLabel1]
+                };
+
+                const myChart1 = new Chart(
+                    document.getElementById('myChart1'),
+                    configDoughnut1
+                );
+            }
+
+            if (NomeComponente.includes("Disco rígido")) {
+                var porcentagem = Math.round(MaiorPorcentagem);
+                var altaDisco = document.getElementById(`altaDisco${agenciaNumero}`);
+                altaDisco.innerHTML = `
+                        ${porcentagem}%
+                        `;
+
+                altoConsumoDisco.innerHTML = `
+                            <div class="left-bottom-card">
+                        <h1 class="agencia-text">Agência</h1>
+                        <p class="num-agencia">${NumeroAgencia}</p>
+                        <h1 class="maquina-text">Máquina</h1>
+                        <p class="num-maquina">${IdMaquina}</p>
+                    </div>
+                    <div class="chartBox">
+                        <canvas id="myChart2"></canvas>
+                    </div>
+                    `;
+
+                // Criando estrutura para plotar gráfico - config
+                const dataDoughnut2 = {
+                    labels: [],
+                    datasets: [{
+                        label: 'Consumo geral de CPU',
+                        data: [porcentagem, (porcentagem - 100)],
+                        backgroundColor: [
+                            'rgb(158, 106, 225)',
+                            'rgb(241, 241, 244)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                };
+
+                const doughnutLabel2 = {
+                    id: 'doughnutLabel',
+                    beforeDatasetsDraw(chart, args, pluginOptions) {
+                        const { ctx } = chart;
+
+                        ctx.save();
+                        const xCoor2 = chart.getDatasetMeta(0).data[0].x;
+                        const yCoor2 = chart.getDatasetMeta(0).data[0].y;
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle'
+                        ctx.font = 'bold 15px Poppins';
+                        ctx.fillStyle = 'rgb(241, 241, 244)';
+                        ctx.fillText(`${dataDoughnut2.datasets[0].data[0]}%`, xCoor2, yCoor2);
+                    }
+                };
+
+                // Criando estrutura para plotar gráfico - config
+                const configDoughnut2 = {
+                    type: 'doughnut',
+                    data: dataDoughnut2,
+                    options: {
+                        hoverBorderWidth: 0,
+                        borderWidth: 0,
+                        weight: 1,
+                        cutout: 37,
+                        events: ["mouseout", "click", "touchstart", "touchmove", "touchend"],
+                        showTooltips: false
+                    },
+                    plugins: [doughnutLabel2]
+                };
+
+                const myChart2 = new Chart(
+                    document.getElementById('myChart2'),
+                    configDoughnut2
+                );
+            }
+        })
+    }
+</script>

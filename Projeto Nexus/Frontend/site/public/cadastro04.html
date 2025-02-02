@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastre sua Maquina</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="./css/cadastro04.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="shortcut icon" href="./assets/img-nexus/favicon-32x32.png" type="image/x-icon">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body onload="funcionario(), validarSessao()">
+  <body>
+    <div class="topo">
+      <a href="cadastro03.html" style="color: white;">
+      <button class="btn-voltar">
+        <div class="seta-voltar"></div>
+          Voltar para tela anterior
+        </button>
+      </a>
+      <div class="imagem-title">
+        <img src="./assets/img-nexus/logo_nexs.svg" alt="Logo Nexus." srcset="">
+        <h2 class="title">Nexus.</h2>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="progress">
+        <div class="circle-active">1</div>
+        <div class="circle-active">2</div>
+        <div class="circle-active">3</div>
+        <div class="circle-active">4</div>
+
+      </div>
+
+      <h1 class="primary-title">Cadastre sua Maquina</h1>
+
+      <p>Coloque as informações para concluir o cadastro</p>
+
+
+      <!-- Informações adicionais -->
+      <div class="information-login">
+
+        <label>Marca*</label>
+        <input type="text" id="brand" placeholder="HP" required>
+
+        <label>Modelo*</label>
+        <input type="text" id="model" placeholder="EliteBook G8" required>
+
+        <label>Situação da Máquina</label>
+        <select aria-placeholder="Selecione" id="situation">
+          <option value="" selected disabled>Escolha a sua situação</option>
+          <option value="Ativo">Ativo</option>
+          <option value="Inativo">Inativo</option>
+          <option value="Manutencao">Manutenção</option>
+        </select>
+        <label>Funcionário Responsável</label>
+        <select id="funcionario_slc">
+          <option value="" selected disabled>Escolha o funcionário</option>
+        </select>
+      </div>
+
+      <button class="submit-proxima" onclick="register()">Finalizar Cadastro</button>
+
+    </div>
+    </div>
+  </body>
+
+</html>
+<script>
+
+  function register() {
+    var brandVar = document.getElementById("brand").value;
+    var modelVar = document.getElementById("model").value;
+    var situationVar = document.getElementById("situation").value;
+    var funcionarioVar = document.getElementById("funcionario_slc").value;
+    var email = sessionStorage.Email;
+
+    if (brandVar == "" || modelVar == "" || situationVar == "" || funcionarioVar == "") {
+      console.log("Erro ao cadastrar! Confira os campos");
+      return false;
+    }
+
+    fetch("/usuarios/cadastrarMaquina", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        brandServer: brandVar,
+        modelServer: modelVar,
+        situationServer: situationVar,
+        funcionarioServer: funcionarioVar,
+        agenciaServer: sessionStorage.Agencia,
+        bancoServer: sessionStorage.Banco,
+        emailServer: email
+      })
+    }).then(function (response) {
+      if (response.status === 200) {
+
+        console.log("Cadastro realizado com sucesso!");
+        setTimeout(() => {
+          window.location = "cadastroToken.html";
+        }, "2000")
+      } else {
+        console.log("Erro ao realizar o cadastro.");
+      }
+    }).catch(function (error) {
+      console.log("Erro na resposta:", error);
+    });
+
+    return false;
+  }
+
+  function funcionario() {
+    var agencia = sessionStorage.Agencia;
+    var banco = sessionStorage.Banco;
+    var email =
+
+    fetch("/usuarios/listarFuncionario", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        agenciaServer: agencia,
+        empresaServer: banco,
+      })
+    }).then(function (response) {
+      if (response.ok) {
+        response.json().then(json => {
+
+          json.forEach(element => {
+            funcionario_slc.innerHTML += `
+            <option value="${element.nome}">${element.nome}</option>
+          `;
+          });
+          console.log("Funcionários carregados com sucesso!");
+        })
+      }
+    });
+
+    return false;
+  }
+
+  function validarSessao() {
+    // aguardar();
+    var endereco = sessionStorage.Endereco;
+    var funcionario = sessionStorage.Funcionario;
+    var banco = sessionStorage.Banco;
+    var agencia = sessionStorage.Agencia;
+    if (funcionario != null) {
+      
+    } else {
+      window.location = "cadastro01.html";
+    }
+
+  }
+</script>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Historico</title>
+    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="shortcut icon" href="./assets/img-nexus/favicon-32x32.png" type="image/x-icon">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="left_side_logo-add-func">
+        <div class="container-logo-top-side">
+            <img src="./assets/img-nexus/logo_nexs.svg" alt="Logo Nexus." srcset="">
+            <h2 class="left_side_title">Nexus.</h2>
+        </div>
+        <div class="num-agencia">Agencia 001</div>
+        <div class="container-add-func-top-side">
+            <i class="fa fa-user-plus" aria-hidden="true"></i>
+            <p class="text-add-func">Funcionário</p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="left_side">
+            <div class="profile_user">
+                <div class="infos">
+                    <img src="./assets/img-nexus/Logo_Bradesco.svg" alt="" srcset="">
+                    <div class="info_profile">
+                        <h5 class="name_user" id="name_user"></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="options">
+                <div class="container_options">
+                    <a href="index.html">
+                        <div class="initial item_option ">
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                            <p class="text_initial">Página Inicial</p>
+                    </a>
+                </div>
+            </div>
+            <div class="container_options">
+                <a href="dashboard_noc.html">
+                    <div class="dashboard item_option ">
+                        <i class="fa fa-line-chart" aria-hidden="true"></i>
+                        <p class="text_initial">Dashboard</p>
+                </a>
+            </div>
+        </div>
+        <div class="container_options">
+            <a href="historico.html">
+                <div class="hist item_option selected">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                    <p class="text_initial">Histórico</p>
+            </a>
+        </div>
+    </div>
+    <div class="container_options">
+        <a href="lista_func.html">
+            <div class="list_func item_option ">
+                <i class="fa fa-book" aria-hidden="true"></i>
+                <p class="text_initial">Lista Funcionários</p>
+        </a>
+    </div>
+    </div>
+    <div class="container_options ">
+        <a href="login.html">
+            <div class="logout item_option ">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                <p class="text_initial">Sair</p>
+        </a>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="right-side-hist">
+        <div class="t-right-side-hist">
+            <h1 class="title-right-side">
+                HISTÓRICO
+            </h1>
+            <div class="button-selected-hist">
+                <p class="parts">Agência</p>
+                <div class="onoffswitch">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch"
+                        tabindex="0" checked>
+                    <label class="onoffswitch-label" for="myonoffswitch">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
+                </div>
+                <p class="parts">Máquina</p>
+            </div>
+            <select name="" id="" class="select-dias">
+                <option value="" selected disabled>Filtro dias</option>
+                <option value="1">Últimos 5 dias</option>
+                <option value="2">Últimos 15 dias</option>
+                <option value="3">Últimos 30 dias</option>
+            </select>
+        </div>
+        <div class="container-m-right-side">
+            <div class="m-right-side-hist">
+                <select name="" id="" class="select-maquinas">
+                    <option value="" selected disabled>Máquinas</option>
+                    <option value="1">Máquina 00001</option>
+                    <option value="2">Máquina 00002</option>
+                    <option value="3">Máquina 00003</option>
+                </select>
+                <div class="items-element">
+                    <a>
+                        <p class="type-element type-slc">Todos</p>
+                    </a>
+                    <a>
+                        <p class="type-element">CPU</p>
+                    </a>
+                    <a>
+                        <p class="type-element">Disco</p>
+                    </a>
+                    <a>
+                        <p class="type-element">RAM</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-b-side">
+            <div class="all-cards-2">
+                <div class="title-cards">
+                    <h1 class="title-right-side-hist">
+                        Quantidade de alertas da agêcia:
+                    </h1>
+                </div>
+                <div class="card-hist alert-red">
+                    <div class="l-card">
+                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    </div>
+                    <div class="r-card">
+                        <div class="title-r-card">
+                            <h1 class="text-r-card">Urgentes</h1>
+                            <p class="days-r-card">Últimos 5 dias</p>
+                            <p class="total-r-card">43</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-hist alert-yellow">
+                    <div class="l-card">
+                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    </div>
+                    <div class="r-card">
+                        <div class="title-r-card">
+                            <h1 class="text-r-card">Críticos</h1>
+                            <p class="days-r-card">Últimos 5 dias</p>
+                            <p class="total-r-card">43</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-hist alert-blue">
+                    <div class="l-card">
+                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    </div>
+                    <div class="r-card">
+                        <div class="title-r-card">
+                            <h1 class="text-r-card">Preocupantes</h1>
+                            <p class="days-r-card">Últimos 5 dias</p>
+                            <p class="total-r-card">43</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="grafico-linha">
+                <div class="titulo-linha">
+                    <h2>Histórico de alertas dos componentes</h2>
+                </div>
+                <canvas id="myChart3"></canvas>
+            </div>
+        </div>
+        <div class="title-maquinas-r-side">
+        </div>
+    </div>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+    function validarSessao() {
+        var email = sessionStorage.EMAIL_USUARIO;
+        var nome = sessionStorage.NOME_USUARIO;
+        var sobrenome = sessionStorage.SOBRENOME;
+        if (nome != null) {
+            name_user.innerHTML = `${nome} ${sobrenome}`
+        } else {
+            window.location = "login.html";
+        }
+    }
+    window.onload = plotarGrafico(), validarSessao();
+
+    function plotarGrafico() {
+        const dataLine = {
+            labels: ['Jan', 'Fev', 'Mar', 'Apr', 'Mai', 'Jun'],
+            datasets: [{
+                label: 'CPU',
+                data: [300, 400, 300, 700, 500, 200,],
+                backgroundColor: [
+                    'rgb(22, 91, 170)'
+
+
+                ],
+                borderColor: [
+                    'rgb(22, 91, 170)'
+                ],
+                hoverOffset: 4
+            }, {
+                label: 'RAM',
+                data: [700, 600, 700, 750, 400, 500],
+                backgroundColor: [
+                    'rgb(247, 101, 163)'
+                ],
+                borderColor: [
+                    'rgb(247, 101, 163)'
+                ],
+                hoverOffset: 4
+            }, {
+                label: 'DISCO',
+                data: [600, 700, 600, 500, 400, 600],
+                color: ['rgb(158, 106, 225)'],
+                backgroundColor: [
+                    'rgb(158, 106, 225)'
+                ],
+                borderColor: [
+                    'rgb(158, 106, 225)'
+                ],
+
+                hoverOffset: 4
+            }]
+        };
+
+        const LineLabel = {
+            id: 'LineLabel',
+            beforeDatasetsDraw(chart, args, pluginOptions) {
+                const { ctx } = chart;
+
+                ctx.save();
+                const xCoor2 = chart.getDatasetMeta(0).data[0].x;
+                const yCoor2 = chart.getDatasetMeta(0).data[0].y;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle'
+                ctx.font = 'bold 15px Poppins';
+                ctx.fillStyle = 'rgb(241, 241, 244)'
+                // ctx.fillText(`${dataLine.datasets[0].data[0]}`, xCoor2, yCoor2);
+            }
+
+        };
+
+        // Criando estrutura para plotar gráfico - config
+        const configLine = {
+            type: 'line',
+            data: dataLine,
+            options: {
+                hoverBorderWidth: 0,
+                borderWidth: 4,
+                weight: 1,
+                cutout: 37,
+                events: ["mouseout", "click", "touchstart", "touchmove", "touchend"],
+                showTooltips: false,
+                scales: {
+                    y: {
+                        grid: {
+                            color: 'rgba(236, 236, 236, 0.37)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(236, 236, 236, 0.37)'
+                        }
+                    }
+                }
+            },
+
+            plugins: [LineLabel]
+        };
+
+        const myChart3 = new Chart(
+            document.getElementById('myChart3'),
+            configLine
+        );
+    }
+</script>

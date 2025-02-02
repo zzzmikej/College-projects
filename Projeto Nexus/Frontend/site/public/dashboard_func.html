@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Funcionário</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="shortcut icon" href="./assets/img-nexus/favicon-32x32.png" type="image/x-icon">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="left_side_logo-func">
+
+        <div class="container-logo-top-side">
+            <img src="./assets/img-nexus/logo_nexs.svg" alt="Logo Nexus." srcset="">
+            <h2 class="left_side_title">Nexus.</h2>
+        </div>
+        <div class="left-side">
+            <div class="num-funcional" id="agenciaFunc">Agência 0</div>
+            <div class="num-maquina" id="maquinaFunc">Máquina 00</div>
+        </div>
+        <div class="right-side">
+            <div class="container-status">
+                <p class="text-status">Ativo</p>
+            </div>
+
+            <div class="container-notify">
+                <img src="./assets/img-nexus/bell.svg" alt="">
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="container">
+        <div class="left_side">
+            <div class="profile_user">
+                <div class="infos">
+                    <img src="./assets/img-nexus/Logo_Bradesco.svg" alt="" srcset="">
+                    <div class="info_profile">
+                        <h5 class="name_user" id="name_user"></h5>
+                    </div>
+                    <div class="icons_profile">
+                        <a href="#"><i class="fa fa-user" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-cog" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="options">
+                <div class="container_options">
+                    <div class="initial item_option ">
+                        <a href="index.html">
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                            <p class="text_initial">Página Inicial</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="container_options">
+                    <a href="dashboard_func.html">
+                        <div class="dashboard item_option selected">
+                            <i h class="fa fa-line-chart" aria-hidden="true"></i>
+                            <p class="text_initial">Dashboard</p>
+                    </a>
+                </div>
+            </div>
+            <div class="container_options">
+                <a href="historico.html">
+                    <div class="hist item_option ">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                        <p class="text_initial">Histórico</p>
+                </a>
+            </div>
+        </div>
+        <div class="container_options">
+            <a href="lista_func.html">
+                <div class="list_func item_option ">
+                    <i class="fa fa-book" aria-hidden="true"></i>
+                    <p class="text_initial">Lista Funcionários</p>
+                </div>
+            </a>
+        </div>
+        <div class="container_options ">
+            <a href="login.html">
+                <div class="logout item_option ">
+                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                    <p class="text_initial">Sair</p>
+            </a>
+        </div>
+    </div>
+    </div>
+    </div>
+    <div class="right_side2">
+        <div class="f-part2">
+            <h1 class="title-right2">MAIOR CONSUMO DOS COMPONENTES</h1>
+            <div class="container-right2">
+                <div class="card">
+                    <div class="top-card">
+                        <h1 class="text-card">CPU</h1>
+                    </div>
+                    <div class="bottom-card" id="altoConsumoCPU">
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="top-card">
+                        <h1 class="text-card">RAM</h1>
+                    </div>
+
+                    <div class="bottom-card" id="altoConsumoRAM">
+
+                    </div>
+
+                </div>
+                <div class="card">
+                    <div class="top-card">
+                        <h1 class="text-card">DISCO</h1>
+                    </div>
+                    <div class="bottom-card" id="altoConsumoDisco">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="grafico" id="ultimoRegistro">
+
+            </div>
+        </div>
+        <div class="container-side">
+            <div class="container-s-part2">
+                <div class="chartBox2">
+                    <h2>Agilidade da Maquina</h2>
+                    <canvas id="gauge" style="margin-top: -50px;"></canvas>
+                </div>
+            </div>
+            <div class="s-part">
+                <div class="container-s-part3">
+                    <h1 class="title-container-s-part2">Tarefas em Primeiro Plano</h1>
+                    <div class="container-alertas2" id="alertaAtual">
+                        <div class="alerta2">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    var agenciaVar = [];
+
+    function validarSessao() {
+        var nome = sessionStorage.NOME_USUARIO;
+        var sobrenome = sessionStorage.SOBRENOME;
+        var agencia = sessionStorage.AGENCIA;
+        var maquina =  sessionStorage.ID_MAQUINA;
+
+        if (nome != null) {
+            name_user.innerHTML = `${nome} ${sobrenome}`;
+            agenciaFunc.innerHTML += `${agencia}`;
+            maquinaFunc.innerHTML += `${maquina}`;
+        } else {
+            window.location = "login.html";
+        }
+    }
+
+    function listarConsumoMaquina() {
+        var funcionario = sessionStorage.ID_FUNCIONARIO;
+
+        fetch("/dashboard/listarConsumoMaquina", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                funcionarioServer: funcionario,
+            })
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(json => {
+                    plotarGrafico();
+                    capturarRegistroComponente();
+                });
+            }
+        });
+    }
+
+    let proximaAtualizacao;
+
+    window.onload = validarSessao(), listarConsumoMaquina(), listarTarefas(), verificarAgilidade();
+
+    function plotarGrafico() {
+        var banco = sessionStorage.BANCO;
+        var agencia = sessionStorage.AGENCIA;
+        var funcionario = sessionStorage.ID_FUNCIONARIO;
+
+        fetch("/dashboard/altoConsumoCPUFunc", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                bancoServer: banco,
+                agenciaServer: agencia,
+                funcionarioServer: funcionario,
+            })
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(json => {
+                    json.forEach(element => {
+
+                        altoConsumoCPU.innerHTML = `
+                        <div class="left-bottom-card">
+                            <h1 class="maquina-text">Horário</h1>
+                            <p class="num-maquina">${element.DataHora}</p>
+                        </div>
+                        <div class="chartBox">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                        `;
+
+                        var totalCapacidade = element.TotalCapacidade;
+                        var consumoAtual = element.ConsumoAtual;
+
+                        var porcetagemAtual = Math.round((consumoAtual * 100) / totalCapacidade);
+
+                        const dataDoughnut = {
+                            labels: [],
+                            datasets: [{
+                                label: 'Consumo geral de CPU',
+                                data: [porcetagemAtual, (100 - porcetagemAtual)],
+                                backgroundColor: [
+                                    'rgb(158, 106, 225)',
+                                    'rgb(241, 241, 244)'
+                                ],
+                                hoverOffset: 4
+                            }]
+                        };
+
+                        const doughnutLabel = {
+                            id: 'doughnutLabel',
+                            beforeDatasetsDraw(chart, args, pluginOptions) {
+                                const { ctx } = chart;
+
+                                ctx.save();
+                                const xCoor1 = chart.getDatasetMeta(0).data[0].x;
+                                const yCoor1 = chart.getDatasetMeta(0).data[0].y;
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'middle'
+                                ctx.font = 'bold 15px Poppins';
+                                ctx.fillStyle = 'rgb(241, 241, 244)';
+                                ctx.fillText(`${dataDoughnut.datasets[0].data[0]}%`, xCoor1, yCoor1);
+                            }
+                        };
+
+                        // Criando estrutura para plotar gráfico - config
+                        const config = {
+                            type: 'doughnut',
+                            data: dataDoughnut,
+                            options: {
+                                hoverBorderWidth: 0,
+                                borderWidth: 0,
+                                weight: 1,
+                                cutout: 37,
+                                events: ["mouseout", "click", "touchstart", "touchmove", "touchend"],
+                                showTooltips: false
+                            },
+                            plugins: [doughnutLabel]
+                        };
+
+                        const myChart = new Chart(
+                            document.getElementById('myChart'),
+                            config);
+                    });
+                });
+            }
+        });
+
+        fetch("/dashboard/altoConsumoRAMFunc", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                bancoServer: banco,
+                agenciaServer: agencia,
+                funcionarioServer: funcionario,
+            })
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(json => {
+                    json.forEach(element => {
+                        altoConsumoRAM.innerHTML = `
+                        <div class="left-bottom-card">
+                            <h1 class="maquina-text">Horário</h1>
+                            <p class="num-maquina">${element.DataHora}</p>
+                        </div>
+                        <div class="chartBox">
+                            <canvas id="myChart1"></canvas>
+                        </div>
+                        `;
+
+                        var totalCapacidade = element.TotalCapacidade;
+                        var consumoAtual = element.ConsumoAtual;
+
+                        var porcetagemAtual = Math.round((consumoAtual * 100) / totalCapacidade);
+
+                        const dataDoughnut1 = {
+                            labels: [],
+                            datasets: [{
+                                label: 'Consumo geral de RAM',
+                                data: [porcetagemAtual, (100 - porcetagemAtual)],
+                                backgroundColor: [
+                                    'rgb(158, 106, 225)',
+                                    'rgb(241, 241, 244)'
+                                ],
+                                hoverOffset: 4
+                            }]
+                        };
+
+                        const doughnutLabel1 = {
+                            id: 'doughnutLabel',
+                            beforeDatasetsDraw(chart, args, pluginOptions) {
+                                const { ctx } = chart;
+
+                                ctx.save();
+                                const xCoor1 = chart.getDatasetMeta(0).data[0].x;
+                                const yCoor1 = chart.getDatasetMeta(0).data[0].y;
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'middle'
+                                ctx.font = 'bold 15px Poppins';
+                                ctx.fillStyle = 'rgb(241, 241, 244)';
+                                ctx.fillText(`${dataDoughnut1.datasets[0].data[0]}%`, xCoor1, yCoor1);
+                            }
+                        };
+
+                        // Criando estrutura para plotar gráfico - config
+                        const configDoughnut1 = {
+                            type: 'doughnut',
+                            data: dataDoughnut1,
+                            options: {
+                                hoverBorderWidth: 0,
+                                borderWidth: 0,
+                                weight: 1,
+                                cutout: 37,
+                                events: ["mouseout", "click", "touchstart", "touchmove", "touchend"],
+                                showTooltips: false
+                            },
+                            plugins: [doughnutLabel1]
+                        };
+
+                        const myChart1 = new Chart(
+                            document.getElementById('myChart1'),
+                            configDoughnut1
+                        );
+
+
+                    });
+                });
+            }
+        });
+
+
+        fetch("/dashboard/altoConsumoDiscoFunc", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                bancoServer: banco,
+                agenciaServer: agencia,
+                funcionarioServer: funcionario,
+            })
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(json => {
+                    json.forEach(element => {
+                        altoConsumoDisco.innerHTML = `
+                        <div class="left-bottom-card">
+                            <h1 class="maquina-text">Horário</h1>
+                            <p class="num-maquina">${element.DataHora}</p>
+                        </div>
+                        <div class="chartBox">
+                            <canvas id="myChart2"></canvas>
+                        </div>
+                        `;
+
+                        var totalCapacidade = element.TotalCapacidade;
+                        var consumoAtual = element.ConsumoAtual;
+
+                        var porcetagemAtual = Math.round((consumoAtual * 100) / totalCapacidade);
+
+                        const dataDoughnut2 = {
+                            labels: [],
+                            datasets: [{
+                                label: 'Consumo geral de CPU',
+                                data: [porcetagemAtual, (100 - porcetagemAtual)],
+                                backgroundColor: [
+                                    'rgb(158, 106, 225)',
+                                    'rgb(241, 241, 244)'
+                                ],
+                                hoverOffset: 4
+                            }]
+                        };
+
+                        const doughnutLabel2 = {
+                            id: 'doughnutLabel',
+                            beforeDatasetsDraw(chart, args, pluginOptions) {
+                                const { ctx } = chart;
+
+                                ctx.save();
+                                const xCoor2 = chart.getDatasetMeta(0).data[0].x;
+                                const yCoor2 = chart.getDatasetMeta(0).data[0].y;
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'middle'
+                                ctx.font = 'bold 15px Poppins';
+                                ctx.fillStyle = 'rgb(241, 241, 244)';
+                                ctx.fillText(`${dataDoughnut2.datasets[0].data[0]}%`, xCoor2, yCoor2);
+                            }
+                        };
+
+                        // Criando estrutura para plotar gráfico - config
+                        const configDoughnut2 = {
+                            type: 'doughnut',
+                            data: dataDoughnut2,
+                            options: {
+                                hoverBorderWidth: 0,
+                                borderWidth: 0,
+                                weight: 1,
+                                cutout: 37,
+                                events: ["mouseout", "click", "touchstart", "touchmove", "touchend"],
+                                showTooltips: false
+                            },
+                            plugins: [doughnutLabel2]
+                        };
+
+                        const myChart2 = new Chart(
+                            document.getElementById('myChart2'),
+                            configDoughnut2
+                        );
+
+                    });
+                });
+            }
+        });
+
+
+        // --------------------------- CHART LINE -----------------------------
+    }
+
+    function atualizarGrafico(dataLine) {
+        document.getElementById('myChart3'),
+        {
+            type: 'line',
+            data: dataLine,
+            options: {
+                hoverBorderWidth: 0,
+                borderWidth: 4,
+                weight: 1,
+                cutout: 37,
+                events: ["mouseout", "click", "touchstart", "touchmove", "touchend"],
+                showTooltips: false,
+                scales: {
+                    y: {
+                        grid: {
+                            color: 'rgba(236, 236, 236, 0.37)'
+                        },
+                        suggestedMax: 100,
+                        suggestedMin: 0,
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(236, 236, 236, 0.37)'
+                        },
+                        max: 6,
+                        min: 1,
+                    }
+                }
+            },
+            plugins: [{
+                beforeDatasetsDraw(chart, args, pluginOptions) {
+                    const { ctx } = chart;
+                    ctx.save();
+                    const xCoor2 = chart.getDatasetMeta(0).data[0].x;
+                    const yCoor2 = chart.getDatasetMeta(0).data[0].y;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle'
+                    ctx.font = 'bold 15px Poppins';
+                    ctx.fillStyle = 'rgb(241, 241, 244)'
+                }
+            }]
+        };
+
+    }
+
+    function capturarRegistroComponente() {
+        var banco = sessionStorage.BANCO;
+        var agencia = sessionStorage.AGENCIA;
+        var funcionario = sessionStorage.ID_FUNCIONARIO;
+
+        fetch("/dashboard/ultimosRegistros", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                bancoServer: banco,
+                agenciaServer: agencia,
+                funcionarioServer: funcionario,
+            })
+        }).then(function (resposta) {
+            if (resposta.ok) {
+
+                const cpu = []
+                const disco = []
+                const ram = []
+                const hours = []
+
+                resposta.json().then(json => {
+                    json.forEach(element => {
+                        ultimoRegistro.innerHTML = `
+                    <div class="titulo"">
+                    <h2>Gráfico de Desempenho de Recursos da Máquina</h2>
+                    </div>
+                    <canvas id="myChart3"></canvas>
+                    `
+
+                        var totalCapacidade = element.CapacidadeMaxima;
+                        var usoAtual= element.UsoAtual;
+                        var porcetagemAtual = Math.round((usoAtual * 100) / totalCapacidade);
+
+                        const now = new Date();
+                        const currentHour = now.getHours();
+
+                        for (let i = currentHour; i < currentHour + 6; i++) {
+                            hours.push((i - 5) + ":00")
+                        }
+
+                        if (element.NomeComponente.includes("Processador")) {
+                            cpu.push(porcetagemAtual)
+                        }
+
+                        if (element.NomeComponente.includes("Disco rígido")) {
+                            disco.push(porcetagemAtual)
+                        }
+
+                        if (element.NomeComponente.includes("Memória RAM")) {
+                            ram.push(porcetagemAtual)
+                        }
+
+                    });
+
+                    const dataLine = {
+                        labels: hours,
+                        datasets: [{
+                            label: 'CPU',
+                            data: cpu,
+                            backgroundColor: [
+                                'rgb(22, 91, 170)'
+                            ],
+                            borderColor: [
+                                'rgb(22, 91, 170)'
+                            ],
+                            hoverOffset: 4
+                        }, {
+                            label: 'RAM',
+                            data: ram,
+                            backgroundColor: [
+                                'rgb(247, 101, 163)'
+                            ],
+                            borderColor: [
+                                'rgb(247, 101, 163)'
+                            ],
+                            hoverOffset: 4
+                        }, {
+                            label: 'DISCO',
+                            data: disco,
+                            color: ['rgb(158, 106, 225)'],
+                            backgroundColor: [
+                                'rgb(158, 106, 225)'
+                            ],
+                            borderColor: [
+                                'rgb(158, 106, 225)'
+                            ],
+
+                            hoverOffset: 4
+                        }]
+                    };
+
+                    const LineLabel = {
+                        id: 'LineLabel',
+                        beforeDatasetsDraw(chart, args, pluginOptions) {
+                            const { ctx } = chart;
+
+                            ctx.save();
+                            const xCoor2 = chart.getDatasetMeta(0).data[0].x;
+                            const yCoor2 = chart.getDatasetMeta(0).data[0].y;
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle'
+                            ctx.font = 'bold 15px Poppins';
+                            ctx.fillStyle = 'rgb(241, 241, 244)'
+                            // ctx.fillText(`${dataLine.datasets[0].data[0]}`, xCoor2, yCoor2);
+                        }
+
+                    };
+
+                    // Criando estrutura para plotar gráfico - config
+                    const configLine = {
+                        type: 'line',
+                        data: dataLine,
+                        options: {
+                            hoverBorderWidth: 0,
+                            borderWidth: 4,
+                            weight: 1,
+                            cutout: 37,
+                            events: ["mouseout", "click", "touchstart", "touchmove", "touchend"],
+                            showTooltips: false,
+                            scales: {
+                                y: {
+                                    grid: {
+                                        color: 'rgba(236, 236, 236, 0.37)'
+                                    },
+                                    suggestedMax: 100,
+                                    suggestedMin: 0,
+                                },
+                                x: {
+                                    grid: {
+                                        color: 'rgba(236, 236, 236, 0.37)'
+                                    },
+                                    max: 6,
+                                    min: 1,
+                                }
+                            }
+                        },
+
+                        plugins: [LineLabel]
+                    };
+
+                    const myChart3 = new Chart(
+                        document.getElementById('myChart3'),
+                        configLine
+                    );
+
+                    atualizarGrafico(dataLine);
+                    // setTimeout(capturarRegistroComponente, 10000);
+                });
+
+
+            }
+        });
+
+    }
+
+    // ------------------------ PRIMEIRO PLANO -------------------------
+
+    function listarTarefas() {
+        var banco = sessionStorage.BANCO;
+        var agencia = sessionStorage.AGENCIA;
+        var funcionario = sessionStorage.ID_FUNCIONARIO;
+
+        fetch("/dashboard/ultimasTarefas",{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                bancoServer: banco,
+                agenciaServer: agencia,
+                funcionarioServer: funcionario,
+            })
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(json => {
+                    var i = 0;
+                    json.forEach(element => {
+                        var totalCapacidade = element.CapacidadeMaxima;
+                        var usoAtualRAM = element.UsoAtualRAM;
+                        var usoAtualDisco = element.UsoAtualDisco;
+                        var usoAtualCPU = element.UsoAtualCPU;
+
+                        alertaAtual.innerHTML += `
+                            <div class="alerta2">
+                            <div class="t-alerta" id="listaTarefas${i}">
+                            </div>
+                            <div class="b-alerta " id="alerta${i}">
+                            </div>
+                            </div>
+                            `
+                        if (element.NomeComponente === "Memória RAM") {
+                            var porcetagemAtual = Math.round((usoAtualRAM * 100) / totalCapacidade);
+
+                            if (porcetagemAtual <= 50) {
+                                var tarefaDaVez = document.querySelector(`#listaTarefas${i}`);
+                                tarefaDaVez.innerHTML = `
+                                        <p class="i-maquina">${element.NomeProcesso}</p>
+                                        <div class="horario">
+                                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            <p class="horario_alerta">${element.DataHora}</p>
+                                        </div>
+                                    `;
+                                document.querySelector(`#alerta${i}`).classList.add("alert-blue");
+                                document.querySelector(`#alerta${i}`).innerHTML = `
+                                        <p class="elemento-alerta">RAM</p>
+                                        <p class="porcentagem-alerta">${porcetagemAtual}%</p>
+                                    `
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-yellow");
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-red");
+
+                            } else if (porcetagemAtual > 50 && porcetagemAtual <= 75) {
+                                var tarefaDaVez = document.querySelector(`#listaTarefas${i}`);
+                                tarefaDaVez.innerHTML = `
+                                        <p class="i-maquina">${element.NomeProcesso}</p>
+                                        <div class="horario">
+                                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            <p class="horario_alerta">${element.DataHora}</p>
+                                        </div>
+                                    `;
+                                document.querySelector(`#alerta${i}`).classList.add("alert-yellow");
+                                document.querySelector(`#alerta${i}`).innerHTML = `
+                                        <p class="elemento-alerta">RAM</p>
+                                        <p class="porcentagem-alerta">${porcetagemAtual}%</p>
+                                    `
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-blue");
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-red");
+                            } else if (porcetagemAtual > 75) {
+                                var tarefaDaVez = document.querySelector(`#listaTarefas${i}`);
+                                tarefaDaVez.innerHTML = `
+                                        <p class="i-maquina">${element.NomeProcesso}</p>
+                                        <div class="horario">
+                                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            <p class="horario_alerta">${element.DataHora}</p>
+                                        </div>
+                                    `;
+                                document.querySelector(`#alerta${i}`).classList.add("alert-red");
+                                document.querySelector(`#alerta${i}`).innerHTML = `
+                                        <p class="elemento-alerta">RAM</p>
+                                        <p class="porcentagem-alerta">${porcetagemAtual}%</p>
+                                    `
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-yellow");
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-blue");
+                            }
+
+                        } else if (element.NomeComponente === "Disco rígido") {
+                            var porcetagemAtual = Math.round((usoAtualDisco * 100) / totalCapacidade);
+
+                            if (porcetagemAtual <= 50) {
+                                var tarefaDaVez = document.querySelector(`#listaTarefas${i}`);
+                                tarefaDaVez.innerHTML = `
+                                        <p class="i-maquina">${element.NomeProcesso}</p>
+                                        <div class="horario">
+                                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            <p class="horario_alerta">${element.DataHora}</p>
+                                        </div>
+                                    `;
+                                document.querySelector(`#alerta${i}`).classList.add("alert-blue");
+                                document.querySelector(`#alerta${i}`).innerHTML = `
+                                        <p class="elemento-alerta">DISCO</p>
+                                        <p class="porcentagem-alerta">${porcetagemAtual}%</p>
+                                    `
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-yellow");
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-red");
+
+                            } else if (porcetagemAtual > 50 && porcetagemAtual <= 75) {
+                                var tarefaDaVez = document.querySelector(`#listaTarefas${i}`);
+                                tarefaDaVez.innerHTML = `
+                                        <p class="i-maquina">${element.NomeProcesso}</p>
+                                        <div class="horario">
+                                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            <p class="horario_alerta">${element.DataHora}</p>
+                                        </div>
+                                    `;
+                                document.querySelector(`#alerta${i}`).classList.add("alert-yellow");
+                                document.querySelector(`#alerta${i}`).innerHTML = `
+                                        <p class="elemento-alerta">DISCO</p>
+                                        <p class="porcentagem-alerta">${porcetagemAtual}%</p>
+                                    `
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-blue");
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-red");
+                            } else if (porcetagemAtual > 75) {
+                                var tarefaDaVez = document.querySelector(`#listaTarefas${i}`);
+                                tarefaDaVez.innerHTML = `
+                                        <p class="i-maquina">${element.NomeProcesso}</p>
+                                        <div class="horario">
+                                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            <p class="horario_alerta">${element.DataHora}</p>
+                                        </div>
+                                    `;
+                                document.querySelector(`#alerta${i}`).classList.add("alert-red");
+                                document.querySelector(`#alerta${i}`).innerHTML = `
+                                        <p class="elemento-alerta">DISCO</p>
+                                        <p class="porcentagem-alerta">${porcetagemAtual}%</p>
+                                    `
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-yellow");
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-blue");
+                            }
+
+                        } else if (element.NomeComponente === "Processador") {
+                            var porcetagemAtual = Math.round((usoAtualDisco * 100) / totalCapacidade);
+
+                            if (porcetagemAtual <= 50) {
+                                var tarefaDaVez = document.querySelector(`#listaTarefas${i}`);
+                                tarefaDaVez.innerHTML = `
+                                        <p class="i-maquina">${element.NomeProcesso}</p>
+                                        <div class="horario">
+                                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            <p class="horario_alerta">${element.DataHora}</p>
+                                        </div>
+                                    `;
+                                document.querySelector(`#alerta${i}`).classList.add("alert-blue");
+                                document.querySelector(`#alerta${i}`).innerHTML = `
+                                        <p class="elemento-alerta">CPU</p>
+                                        <p class="porcentagem-alerta">${porcetagemAtual}%</p>
+                                    `
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-yellow");
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-red");
+
+                            } else if (porcetagemAtual > 50 && porcetagemAtual <= 75) {
+                                var tarefaDaVez = document.querySelector(`#listaTarefas${i}`);
+                                tarefaDaVez.innerHTML = `
+                                        <p class="i-maquina">${element.NomeProcesso}</p>
+                                        <div class="horario">
+                                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            <p class="horario_alerta">${element.DataHora}</p>
+                                        </div>
+                                    `;
+                                document.querySelector(`#alerta${i}`).classList.add("alert-yellow");
+                                document.querySelector(`#alerta${i}`).innerHTML = `
+                                        <p class="elemento-alerta">CPU</p>
+                                        <p class="porcentagem-alerta">${porcetagemAtual}%</p>
+                                    `
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-blue");
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-red");
+                            } else if (porcetagemAtual > 75) {
+                                var tarefaDaVez = document.querySelector(`#listaTarefas${i}`);
+                                tarefaDaVez.innerHTML = `
+                                        <p class="i-maquina">${element.NomeProcesso}</p>
+                                        <div class="horario">
+                                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            <p class="horario_alerta">${element.DataHora}</p>
+                                        </div>
+                                    `;
+                                document.querySelector(`#alerta${i}`).classList.add("alert-red");
+                                document.querySelector(`#alerta${i}`).innerHTML = `
+                                        <p class="elemento-alerta">CPU</p>
+                                        <p class="porcentagem-alerta">${porcetagemAtual}%</p>
+                                    `
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-yellow");
+                                document.querySelector(`#alerta${i}`).classList.remove("alert-blue");
+                            }
+
+                        }
+                        i++;
+                    })
+                });
+            }
+        });
+    }
+
+    // ------------------------ VELOCIMETRO -------------------------
+    function verificarAgilidade() {
+
+        var banco = sessionStorage.BANCO;
+        var agencia = sessionStorage.AGENCIA;
+        var funcionario = sessionStorage.ID_FUNCIONARIO;
+
+        fetch("/dashboard/verificarAgilidade", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                bancoServer: banco,
+                agenciaServer: agencia,
+                funcionarioServer: funcionario,
+            })
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(json => {
+                    var usoAtual = 0;
+                    var totalCapacidade = 0;
+                    var velocidadeTotal = 0;
+                    json.forEach(element => {
+
+                        totalCapacidade += element.CapacidadeMaxima;
+
+                        usoAtual += element.UsoAtual;
+
+                        var porcetagemAtual = Math.round((usoAtual * 100) / totalCapacidade);
+
+                        velocidadeTotal = 100 - (porcetagemAtual / 200) * 100;
+                    })
+
+                    const data = {
+                        labels: ["Bom", "Ok", "Ruim"],
+                        datasets: [
+                            {
+                                label: "Gauge",
+                                data: [100, 65, 35],
+                                backgroundColor: [
+                                    "rgba(255, 26, 104, 0.8)",
+                                    "rgba(255, 206, 86, 0.8)",
+                                    "rgba(75, 192, 192, 0.8)",
+                                ],
+                                needleValue: velocidadeTotal,
+                                borderColor: "white",
+                                borderWidth: 0,
+                                cutout: "70%",
+                                circumference: 180,
+                                rotation: 270,
+                                borderRadius: 1,
+
+                            },
+                        ],
+                    };
+
+                    const gaugeNeedle = {
+                        id: "gaugeNeedle",
+                        afterDatasetDraw(chart, args, options) {
+                            const {
+                                ctx,
+                                config,
+                                data,
+                                chartArea: { top, right, bottom, left, width, height },
+                            } = chart;
+                            ctx.save();
+                            const needleValue = data.datasets[0].needleValue;
+                            const dataTotal = data.datasets[0].data.reduce((a, b) => a + b, 0);
+
+                            if (needleValue >= 0 && needleValue <= 100) {
+                                var angle = Math.PI + (needleValue / 100) * Math.PI;
+                            } else {
+                                var angle = 0;
+                            }
+
+                            const cx = width / 2;
+                            const cy = chart._metasets[0].data[0].y;
+
+                            ctx.translate(cx, cy);
+                            ctx.rotate(angle);
+                            ctx.beginPath();
+                            ctx.moveTo(0, -10);
+                            ctx.lineTo(height - ctx.canvas.offsetTop + 15, 0);
+                            ctx.lineTo(0, 10);
+                            ctx.fillStyle = "#444";
+                            ctx.fill();
+                            //needle dot -- bolinha do ponteiro
+                            ctx.translate(-cx, -cy);
+                            ctx.beginPath();
+                            ctx.arc(cx, cy, 10, 0, 10);
+                            ctx.fill();
+                            ctx.restore();
+
+                            //text
+                            ctx.font = "bold 30px Poppins";
+                            ctx.fillStyle = "white";
+                            ctx.fillText(needleValue + "%", cx, cy + 50);
+                            ctx.font = "bold 12px Poppins";
+                            ctx.fillText("Pessimo", 25, cy + 40);
+                            ctx.fillText("Bom", cx + 130, 265); // change values if the position gets changed
+                            ctx.textAlign = "center";
+                            ctx.restore();
+                        },
+                    };
+                    // config
+                    const config = {
+                        type: "doughnut",
+                        data,
+                        options: {
+                            plugins: {
+                                legend: {
+                                    display: false,
+                                },
+                                tooltip: {
+                                    yAlign: "bottom",
+                                    displayColors: false,
+                                    callbacks: {
+                                        label: function (tooltipItem, data, value) {
+                                            return tooltipItem.label;
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        plugins: [gaugeNeedle],
+                    };
+
+                    const myChart4 = new Chart(
+                        document.getElementById('gauge'),
+                        config
+                    );
+
+                    
+                },
+                // setTimeout(verificarAgilidade(), 10000)
+                );
+            }
+        });
+    }
+
+</script>

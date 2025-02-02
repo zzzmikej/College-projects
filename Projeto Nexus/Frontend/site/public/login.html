@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus - Login</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="shortcut icon" href="./assets/img-nexus/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="./css/cadastro04.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/swiper@10.2.0/swiper-bundle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/login.css">
+
+
+</head>
+
+<body onload="validarSessao()">
+
+    <div class="topo">
+        <a href="index.html" style="color: white;">
+            <button class="btn-voltar">
+                <div class="seta-voltar"></div>
+                Voltar para Home Page
+            </button>
+        </a>
+    </div>
+
+    <div class="div-pai-sections">
+        <section class="left-side-login">
+            <h1 class="nexus-logo">Nexus</h1>
+            <div class="items-login">
+                <h2 class="subtitle-items-login">
+                    Bem vindo de volta!
+                </h2>
+                <div class="campo login">
+                    <input id="email" class="input-fields" placeholder="Insira o seu email">
+                </div>
+                <div class="campo">
+                    <input id="token" type="password" class="input-fields" placeholder="Insira o seu token">
+                </div>
+                <div id="erroLogin">
+                </div>
+                <div class="button">
+                    <button class="button-login" onclick="login()">Login</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="right-side-login">
+            <div class="div-logo">
+                <img src="assets/img-nexus/logo_nexs.svg" alt="imagem-logo">
+            </div>
+        </section>
+    </div>
+</body>
+
+</html>
+<script>
+    function validarSessao() {
+        sessionStorage.clear()
+    }
+
+    function login() {
+
+        var emailVar = email.value;
+        var tokenVar = token.value;
+        if (emailVar == "" || tokenVar == "") {
+            erroLogin.innerHTML = `
+                        <p style="color: red">Nennum dos Campos podem estar vazios!</p>
+                    `;
+            setTimeout(function () {
+                erroLogin.innerHTML = `
+                        `
+            }, 1500);
+            return false;
+        }
+
+        fetch("/usuarios/autenticar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                emailServer: emailVar,
+                tokenServer: tokenVar
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+                resposta.json().then(element => {
+                    sessionStorage.EMAIL_USUARIO = element.emailCorporativo;
+                    sessionStorage.NOME_USUARIO = element.nome;
+                    sessionStorage.SOBRENOME = element.sobrenome;
+                    sessionStorage.CARGO = element.cargo;
+                    sessionStorage.BANCO = element.nomeEmpresa;
+                    sessionStorage.AGENCIA = element.fkAgencia[0];
+                    sessionStorage.ID_FUNCIONARIO = element.idFuncionario;
+                    sessionStorage.ID_MAQUINA = element.idMaquina;
+
+                    console.log(element.idMaquina);
+                    console.log(element.fkAgencia[0])
+                    erroLogin.innerHTML = `
+                        <p style="color: green">Login Realizado!!</p>
+                    `;
+
+                    setTimeout(function () {
+                        var cargo = sessionStorage.CARGO;
+                        if (cargo.toLowerCase().includes("gerente")) {
+                            window.location = "dashboard_agencia.html";
+                        } else if (cargo.toLowerCase().includes("noc")) {
+                            window.location = "dashboard_noc.html";
+                        } else {
+                            window.location = "dashboard_func.html";
+                        }
+                    }, 1000); // apenas para exibir o loading
+                });
+
+
+            } else {
+                switch (resposta.status) {
+                    case 400:
+                        console.log("Erro 400: Requisição inválida.");
+                        // Lógica para tratar erro 400
+                        erroLogin.innerHTML = `
+                        <p style="color: red">Requisição inválida.</p>
+                    `;
+                        setTimeout(function () {
+                            erroLogin.innerHTML = `
+                        `
+                        }, 1500);
+                        break;
+                    case 401:
+                        console.log("Erro 401: Não autorizado.");
+                        // Lógica para tratar erro 401
+                        erroLogin.innerHTML = `
+                        <p style="color: red">Não autorizado.</p>
+                    `;
+                        setTimeout(function () {
+                            erroLogin.innerHTML = `
+                        `
+                        }, 1500);
+                        break;
+                    case 403:
+                        console.log("Erro 403: Acesso proibido. Verifique suas credenciais.");
+                        // Lógica para tratar erro 403
+                        erroLogin.innerHTML = `
+                        <p style="color: red">Email ou senha incorretos.</p>
+                    `;
+                        setTimeout(function () {
+                            erroLogin.innerHTML = `
+                        `
+                        }, 1500);
+                        break;
+                    case 404:
+                        console.log("Erro 404: Recurso não encontrado.");
+                        // Lógica para tratar erro 404
+                        erroLogin.innerHTML = `
+                        <p style="color: red">Não encontado as crendeciais.</p>
+                    `;
+                        setTimeout(function () {
+                            erroLogin.innerHTML = `
+                        `
+                        }, 1500);
+                        break;
+                    case 500:
+                        console.log("Erro 500: Erro interno do servidor.");
+                        // Lógica para tratar erro 500
+                        erroLogin.innerHTML = `
+                        <p style="color: red">Erro no Servidor.</p>
+                    `;
+                        setTimeout(function () {
+                            erroLogin.innerHTML = `
+                        `
+                        }, 1500);
+                        break;
+                }
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+        return false;
+    }
+
+</script>

@@ -1,0 +1,245 @@
+/* Importação de fontes */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kodchasan:wght@300;400;500;700&family=Moulpali&family=Poppins:wght@300;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap');
+
+/* Reset de estilos e configurações padrão */
+body, html {
+    padding: 0;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    overflow-y: hidden;
+}
+
+/* Estilo para links */
+a {
+    text-decoration: none;
+    color: black;
+    transition: opacity 0.5s;
+}
+
+a:hover {
+    opacity: 0.6;
+}
+
+.topo {
+  display: flex;
+  flex-direction: column; /* Alinhar elementos verticalmente */
+  justify-content: center; /* Centralizar verticalmente */
+  align-items: center; /* Centralizar horizontalmente */
+  background-color: rgb(0, 0, 0);
+  color: white;
+  padding: 10px;
+}
+
+.btn-voltar {
+  color: white;
+  background: none;
+  border: none;
+  font-size: 14px;
+  padding: 20px;
+  cursor: pointer;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  display: flex; /* Para alinhar a seta com o texto */
+  align-items: center; /* Alinhar verticalmente */
+}
+
+.seta-voltar::before {
+  content: "<"; /* Código Unicode para uma seta apontando para a esquerda */
+  margin-right: 5px;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.imagem-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+
+.imagem-title img {
+  width: 50px;
+  height: 50px;
+}
+
+.title {
+  font-size: 30px;
+  font-family: 'Kodchasan', sans-serif;
+  color: #fff;
+  text-shadow: 0 0 45px #fff;
+}
+
+.progress {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: white;
+  border: 1px solid #9E6AE1;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle-active {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: white;
+  border: 1px solid #9E6AE1;
+  background-color: #9E6AE1;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle-active + .circle {
+  border-color: #9E6AE1;
+}
+
+/* Estilos para o container */
+.container {
+    background: rgb(0,0,0);
+    background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(33,0,76,1) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 90vh;
+}
+
+.primary-title {
+    font-size: 40px;
+    font-weight: 700;
+    color: white;
+    margin: 1% 0;
+}
+
+.container p {
+    font-size: 20px;
+    font-weight: 300;
+    color: white;
+    margin: 1% 0;
+}
+
+/* Estilos para o formulário de login */
+.information-login {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  color: white;
+  border-radius: 5px;
+}
+
+.information-login label {
+  font-size: 14px;
+  font-weight: 300;
+  color: white;
+  margin: 1% 0;
+}
+
+.information-login input {
+  width: 100%;
+  padding: 12px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.agencia {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.agencia div {
+  flex-direction: column;
+  align-items: center;
+}
+
+.agencia label {
+  font-size: 14px;
+  font-weight: 300;
+  color: white;
+}
+
+.agencia input {
+  width: 245px;
+  padding: 12px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+#id_digito {
+  width: 150px;
+}
+
+.telefone {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 105%;
+}
+
+.telefone div {
+  flex-direction: column;
+  align-items: center;
+}
+
+.telefone label {
+  font-size: 14px;
+  font-weight: 300;
+  color: white;
+  margin-right: 20px;
+}
+
+.telefone input {
+  width: 300px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+#id_ddd {
+  width: 90px;
+}
+
+.submit-proxima {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+  background-color: #9E6AE1;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-proxima:hover {
+  background-color: #7c4fd9;
+}
